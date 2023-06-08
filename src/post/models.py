@@ -14,9 +14,6 @@ class JobPosting(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String(256), nullable=False)
     content = Column(Text, nullable=False)
-
-    working_hours = relationship("WorkHours", backref="job_postings")
-    working_hours_id = Column(Integer, ForeignKey("working_hours.id"), nullable=True)
     
     location = relationship("Location", backref="job_postings")
     location_id = Column(Integer, ForeignKey("location.id"), nullable=False)
@@ -24,8 +21,8 @@ class JobPosting(Base):
     salary_month = Column(Integer, nullable=True)
     salary_year = Column(Integer, nullable=True)
     views = Column(Integer, nullable=False, default=0)
-    created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
-    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow)
+    created_at = Column(DateTime, nullable=False, default=datetime.now)
+    updated_at = Column(DateTime, nullable=False, default=datetime.now)
     deleted_at = Column(DateTime, nullable=True)
     is_deleted = Column(Boolean, nullable=False, default=False)
 
@@ -48,6 +45,12 @@ class WorkingHours(Base):
     start_time = Column(String(10), nullable=False)
     end_time = Column(String(10), nullable=False)
 
+    job_posting = relationship("JobPosting", backref="working_hours")
+    job_posting_id = Column(Integer, ForeignKey("job_postings.id"), nullable=True)
+
+    created_at = Column(DateTime, nullable=False, default=datetime.now)
+    updated_at = Column(DateTime, nullable=False, default=datetime.now)
+
 
 class JobSeekerPostings(Base):
     __tablename__ = "job_seeker_postings"
@@ -60,7 +63,7 @@ class JobSeekerPostings(Base):
     visa = Column(String(50), nullable=True)
     contract = Column(String(50), nullable=False)
     views = Column(Integer, nullable=False, default=0)
-    created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
-    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow)
+    created_at = Column(DateTime, nullable=False, default=datetime.now)
+    updated_at = Column(DateTime, nullable=False, default=datetime.now)
     deleted_at = Column(DateTime, nullable=True)
     is_deleted = Column(Boolean, nullable=False, default=False)

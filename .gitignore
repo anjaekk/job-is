@@ -201,4 +201,6 @@ __pypackages__/
 .history
 .ionide
 
+alembic.ini
+
 # End of https://www.toptal.com/developers/gitignore/api/pythonvanilla,visualstudiocode,pycharm
