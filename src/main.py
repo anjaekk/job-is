@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from envs import config
+from .envs import config
 
 
 app = FastAPI()
