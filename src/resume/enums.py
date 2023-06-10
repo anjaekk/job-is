@@ -7,4 +7,4 @@ class CountryEnum(BaseEnum):
     PHILIPPINES = "philippines"
     VIETNAM = "vietnam"
     CAMBODIA = "cambodia"
-    OTHER = "기타"
+    OTHER = "other"
