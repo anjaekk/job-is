@@ -8,3 +8,4 @@ class CountryEnum(BaseEnum):
     VIETNAM = "vietnam"
     CAMBODIA = "cambodia"
     OTHER = "other"
+    UNKNOWN = "unknown"
