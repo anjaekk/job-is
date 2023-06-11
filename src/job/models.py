@@ -1,30 +1,39 @@
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
-from sqlalchemy import DateTime, Column, String, Integer, Boolean, Text, Enum
+from sqlalchemy import DateTime, Column, String, Integer, Boolean, Text, JSON, Enum
 from sqlalchemy.sql.schema import ForeignKey
+from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 
-from ..database.config import Base
-
+from src.database.config import Base
+from .enums import JobCategoryEnum, JobPostingStatusEnum
 
 
 class JobPosting(Base):
     __tablename__ = "job_postings"
 
     id = Column(Integer, primary_key=True)
-    title = Column(String(256), nullable=False)
+    title = Column(String(255), nullable=False)
     content = Column(Text, nullable=False)
+    category = Column(Enum(JobCategoryEnum), nullable=False)
     
     location = relationship("Location", backref="job_postings")
-    location_id = Column(Integer, ForeignKey("location.id"), nullable=False)
-    
-    salary_month = Column(Integer, nullable=True)
-    salary_year = Column(Integer, nullable=True)
+    location_id = Column(Integer, ForeignKey("locations.id"), nullable=False)
+
+    salary = Column(JSON, nullable=True)
     views = Column(Integer, nullable=False, default=0)
+    status = Column(
+        Enum(JobPostingStatusEnum), nullable=False, default=JobPostingStatusEnum.PUBLISHED
+    )
     created_at = Column(DateTime, nullable=False, default=datetime.now)
-    updated_at = Column(DateTime, nullable=False, default=datetime.now)
+    renewaled_at = Column(DateTime, nullable=False, default=datetime.now)
+    deadline = Column(
+        DateTime(timezone=True), nullable=True, default=created_at + relativedelta(months=3)
+    )
+    updated_at = Column(DateTime(timezone=True), nullable=False, onupdate=func.now())
     deleted_at = Column(DateTime, nullable=True)
-    is_deleted = Column(Boolean, nullable=False, default=False)
+
 
 
 class Location(Base):
@@ -33,7 +42,7 @@ class Location(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(150))
 
-    parent = relationship("Location", remote_side=[id])
+    children = relationship("Location", backref="parent", remote_side=[id], join_depth=3)
     parent_id = Column(Integer, ForeignKey("locations.id"), nullable=True)
 
 
@@ -49,4 +58,4 @@ class WorkingHours(Base):
     job_posting_id = Column(Integer, ForeignKey("job_postings.id"), nullable=True)
 
     created_at = Column(DateTime, nullable=False, default=datetime.now)
-    updated_at = Column(DateTime, nullable=False, default=datetime.now)
+    updated_at = Column(DateTime, nullable=False, default=datetime.now, onupdate=func.now())

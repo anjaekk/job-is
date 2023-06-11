@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
 from .envs import config
-
+from .job.routers import job_routers
 
 app = FastAPI()
 
@@ -13,6 +13,8 @@ app.add_middleware(
     allow_methods=config.ALLOW_METHODS,
     allow_headers=config.ALLOW_HEADERS,
 )
+
+app.include_router(job_routers, prefix="/jobs")
 
 
 @app.get("/health")
