@@ -29,9 +29,9 @@ class JobPosting(Base):
     created_at = Column(DateTime, nullable=False, default=datetime.now)
     renewaled_at = Column(DateTime, nullable=False, default=datetime.now)
     deadline = Column(
-        DateTime(timezone=True), nullable=True, default=created_at + relativedelta(months=3)
+        DateTime(timezone=True), nullable=True, default=lambda: datetime.now() + relativedelta(months=3)
     )
-    updated_at = Column(DateTime(timezone=True), nullable=False, onupdate=func.now())
+    updated_at = Column(DateTime(timezone=True), nullable=True, onupdate=func.now())
     deleted_at = Column(DateTime, nullable=True)
 
 

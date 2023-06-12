@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi_pagination import add_pagination
 from starlette.middleware.cors import CORSMiddleware
 
 from .envs import config
@@ -16,6 +17,7 @@ app.add_middleware(
 
 app.include_router(job_routers, prefix="/jobs")
 
+add_pagination(app)
 
 @app.get("/health")
 async def health_check():
