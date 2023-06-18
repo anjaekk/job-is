@@ -62,3 +62,21 @@ class CreateJobPostingSchema(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class UpdateJobPostingSchema(BaseModel):
+    title: Optional[str] = Field(max_length=255)
+    content: Optional[str]
+    category: Optional[JobCategoryEnum]
+    location_id: Optional[int]
+    salary: Optional[Dict]
+    working_hours: Optional[List[Dict[str, Dict[int, int]]]] =[]
+
+    @validator("category")
+    def validate_category(cls, value):
+        if value and value not in JobCategoryEnum:
+            raise ValueError("Invalid category: Value is not in JobCategoryEnum")
+        return value
+
+    class Config:
+        orm_mode = True
