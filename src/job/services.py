@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import desc
 
 from src.database.config import get_db
-from .models import JobPosting
+from .models import JobPosting, Location
 from .schemas import (
     CreateJobPostingSchema,
     UpdateJobPostingSchema
@@ -34,10 +34,18 @@ async def service_get_job_by_id(
         )
 
 
+async def generage_location(db: Session, location_id: int):
+    if location := db.query(Location).get(location_id):
+        return location
+    else:
+        raise HTTPException(status_code=404, detail="Location not found")
+
+
 async def service_create_job(
     job_post: CreateJobPostingSchema,
     db: Session
-):
+):  
+    await generage_location(db, job_post.location_id)
     new_job_post = JobPosting(**job_post.dict())
 
     db.add(new_job_post)

@@ -9,8 +9,8 @@ from .enums import JobCategoryEnum, JobPostingStatusEnum
 class LocationSchema(BaseModel):
     id: int
     name: str
-    parent_id: Optional[int] = None
-    children: List[Any] = None
+    parent: Optional["LocationSchema"]
+    #children: Optional[List["LocationSchema"]] = []
 
     class Config:
         orm_mode = True
