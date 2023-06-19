@@ -42,8 +42,8 @@ class Location(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(150))
 
-    children = relationship("Location", backref="parent", remote_side=[id], join_depth=3)
     parent_id = Column(Integer, ForeignKey("locations.id"), nullable=True)
+    parent = relationship("Location", remote_side=[id], backref="children")
 
 
 class WorkingHours(Base):
