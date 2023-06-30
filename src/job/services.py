@@ -25,7 +25,7 @@ async def service_get_job_by_id(
     job_id: int,
     db: Session
 ):
-    if job_post := db.query(JobPosting).get(job_id):
+    if job_post := db.get(JobPosting, job_id):
         return job_post
     else:
         raise HTTPException(
@@ -35,7 +35,7 @@ async def service_get_job_by_id(
 
 
 async def generage_location(db: Session, location_id: int):
-    if location := db.query(Location).get(location_id):
+    if location := db.get(Location, location_id):
         return location
     else:
         raise HTTPException(status_code=404, detail="Location not found")
@@ -59,7 +59,7 @@ async def service_update_job_by_id(
     job_post: UpdateJobPostingSchema,
     db: Session
 ):
-    if job := db.query(JobPosting).get(job_id):
+    if job := db.get(JobPosting, job_id):
         updated_fields = job_post.dict(exclude_unset=True)
         for field, value in updated_fields.items():
             setattr(job, field, value)
@@ -77,7 +77,7 @@ async def service_delete_job_by_id(
     job_id: int,
     db: Session
 ):
-    if job := db.query(JobPosting).get(job_id):
+    if job := db.get(JobPosting, job_id):
         job.status = JobPostingStatusEnum.DELETED
         job.deleted_at = datetime.datetime.now()
         db.commit()
