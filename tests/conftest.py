@@ -1,21 +1,21 @@
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.orm import sessionmaker, scoped_session, Session
+from alembic.command import upgrade as alembic_upgrade
+from alembic.config import Config as AlembicConfig
 
-from ..src.database.config import Base, get_db
-from ..src.main import app
-
-
-SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
-Session = scoped_session(sessionmaker())
+from src.database.config import Base, get_db
+from src.main import app
+from .session import Session, engine
+from .factories import (
+    LocationFactory, 
+    JobPostingFactory
+)
 
 
 @pytest.fixture(scope="session")
 def db():
-    engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
-    )
     Base.metadata.create_all(bind=engine)
     yield
     Base.metadata.drop_all(bind=engine)
@@ -23,11 +23,18 @@ def db():
 
 @pytest.fixture(scope="function", autouse=True)
 def session(db):
-    db = Session()
-    yield db
-    db.rollback()
+    session = Session()
+    yield session
+    session.rollback()
+    session.close()
 
 
-@pytest.fixture(scope="function")
-def client(session):
-    yield TestClient(app)
+@pytest.fixture
+def location(session: Session):
+    LocationFactory(name="강남구", parent_id=1)
+    return LocationFactory()
+
+
+@pytest.fixture
+def job_posting(session: Session):
+    return JobPostingFactory.create_batch(10)

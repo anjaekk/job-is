@@ -42,8 +42,8 @@ async def generage_location(db: Session, location_id: int):
 
 
 async def service_create_job(
-    job_post: CreateJobPostingSchema,
-    db: Session
+    db: Session,
+    job_post: CreateJobPostingSchema
 ):  
     await generage_location(db, job_post.location_id)
     new_job_post = JobPosting(**job_post.dict())
