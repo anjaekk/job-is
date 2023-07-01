@@ -9,3 +9,9 @@ class CountryEnum(BaseEnum):
     CAMBODIA = "cambodia"
     OTHER = "other"
     UNKNOWN = "unknown"
+
+
+class JobTypeEnum(BaseEnum):
+    FULLTIME = "fulltime"
+    PARTTIME = "parttime"
+    CONTRACT = "contract"

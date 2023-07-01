@@ -35,7 +35,7 @@ async def test_create_job(session: Session, location: Location):
         location_id=location.id,
         salary={"시급": "1000000"}
     )
-    case = await create_job(db=session, job_post=job_post)
+    case = await create_job(job_post=job_post, db=session)
     assert case
     assert case.title == job_post.title
 

@@ -1,13 +1,7 @@
+import random
 from datetime import datetime
 from sqlalchemy.orm import scoped_session, sessionmaker
-from factory import (
-    LazyAttribute,
-    LazyFunction,
-    Sequence,
-    SubFactory,
-    post_generation,
-    SelfAttribute,
-)
+
 from factory.alchemy import SQLAlchemyModelFactory
 from factory.fuzzy import FuzzyChoice, FuzzyDateTime, FuzzyInteger, FuzzyText
 from faker import Faker
@@ -53,5 +47,7 @@ class JobPostingFactory(TimeStampBaseFactory):
     content = FuzzyText()
     category = FuzzyChoice(list(JobCategoryEnum))
     location_id = fake.pyint(min_value=1, max_value=2)
-    salary = {"시급": fake.pyint(min_value=10_000, max_value=100_000)}
+    salary = {
+        random.choice(["시급", "월급", "연봉"]): fake.pyint(min_value=10_000, max_value=100_000)
+    }
 

@@ -4,6 +4,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 from .envs import config
 from .job.routers import job_routers
+from .resume.routers import resume_routers
 
 app = FastAPI()
 
@@ -16,6 +17,7 @@ app.add_middleware(
 )
 
 app.include_router(job_routers, prefix="/jobs")
+app.include_router(resume_routers, prefix="/resumes")
 
 add_pagination(app)
 

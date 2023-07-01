@@ -5,19 +5,19 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
 from src.database.config import Base
-from .enums import CountryEnum
+from .enums import CountryEnum, JobTypeEnum
 
 
-class ResumePostings(Base):
+class ResumePosting(Base):
     __tablename__ = "resume_postings"
 
     id = Column(Integer, primary_key=True)
     title = Column(String(255), nullable=False)
     content = Column(Text, nullable=False)
-    job_type = Column(String(10), nullable=False)
+    job_type = Column(Enum(JobTypeEnum))
     nationality = Column(Enum(CountryEnum), default=CountryEnum.UNKNOWN)
     visa = Column(String(50), nullable=True)
-    contract = Column(String(50), nullable=False)
+    contact = Column(String(50), nullable=False)
     views = Column(Integer, nullable=False, default=0)
     created_at = Column(DateTime, nullable=False, default=datetime.now)
     updated_at = Column(DateTime, nullable=False, default=datetime.now, onupdate=func.now())
