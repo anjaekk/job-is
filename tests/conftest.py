@@ -10,7 +10,8 @@ from src.main import app
 from .session import Session, engine
 from .factories import (
     LocationFactory, 
-    JobPostingFactory
+    JobPostingFactory,
+    ResumePostingFactory,
 )
 
 
@@ -38,3 +39,8 @@ def location(session: Session):
 @pytest.fixture
 def job_posting(session: Session):
     return JobPostingFactory.create_batch(10)
+
+
+@pytest.fixture
+def resume_posting(session: Session):
+    return ResumePostingFactory.create_batch(10)

@@ -9,7 +9,9 @@ from faker.providers import misc
 from pytz import UTC
 
 from src.job.models import JobPosting, Location, WorkingHours
+from src.resume.models import ResumePosting
 from src.job.enums import JobPostingStatusEnum, JobCategoryEnum
+from src.resume.enums import JobTypeEnum, CountryEnum
 from .session import Session
 
 
@@ -51,3 +53,15 @@ class JobPostingFactory(TimeStampBaseFactory):
         random.choice(["시급", "월급", "연봉"]): fake.pyint(min_value=10_000, max_value=100_000)
     }
 
+
+class ResumePostingFactory(TimeStampBaseFactory):
+    class Meta:
+        model = ResumePosting
+        sqlalchemy_session = Session
+
+    title = fake.sentence()
+    content = FuzzyText()
+    job_type = FuzzyChoice(list(JobTypeEnum))
+    nationality = FuzzyChoice(list(CountryEnum))
+    visa = "F2"
+    contact = fake.phone_number()
