@@ -32,7 +32,7 @@ class JobPosting(Base):
         DateTime(timezone=True), nullable=True, default=lambda: datetime.now() + relativedelta(months=3)
     )
     updated_at = Column(DateTime(timezone=True), nullable=True, onupdate=func.now())
-    deleted_at = Column(DateTime, nullable=True)
+    deleted_at = Column(DateTime(timezone=True), nullable=True)
 
 
 
@@ -57,5 +57,5 @@ class WorkingHours(Base):
     job_posting = relationship("JobPosting", backref="working_hours")
     job_posting_id = Column(Integer, ForeignKey("job_postings.id"), nullable=True)
 
-    created_at = Column(DateTime, nullable=False, default=datetime.now)
-    updated_at = Column(DateTime, nullable=False, default=datetime.now, onupdate=func.now())
+    created_at = Column(DateTime(timezone=True), nullable=False, default=datetime.now)
+    updated_at = Column(DateTime(timezone=True), nullable=False, default=datetime.now, onupdate=func.now())
