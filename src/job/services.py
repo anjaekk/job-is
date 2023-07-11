@@ -11,7 +11,7 @@ from .schemas import (
     UpdateJobPostingSchema
 )
 from .enums import JobPostingStatusEnum
-
+from ..core.posts import add_posting_views
 
 async def service_get_list_jobs(
     db: Session
@@ -21,18 +21,12 @@ async def service_get_list_jobs(
     ).order_by(desc(JobPosting.created_at)).all()
 
 
-async def add_job_posting_views(db, job_post):
-    job_post.views += 1
-    db.commit()
-    db.refresh(job_post)
-
-
 async def service_get_job_by_id(
     job_id: int,
     db: Session
 ):
     if job_post := db.get(JobPosting, job_id):
-        await add_job_posting_views(db, job_post)
+        await add_posting_views(db, job_post)
         return job_post
     else:
         raise HTTPException(
