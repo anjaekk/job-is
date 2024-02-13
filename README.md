@@ -1,6 +1,11 @@
 # Job-is 
 - 외국인 구인, 구직 플랫폼
 
+## Run Test
+```
+docker-compose exec job-is pytest tests/ -v
+```
+
 ## stacks
 **Development**
 ```
